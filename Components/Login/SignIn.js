@@ -1,50 +1,62 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import {
-    useFonts,
-   
-  } from '@expo-google-fonts/inter';
-export default class SignIn extends Component {
-    // constructor (props){
-    //     super(props);
-    //     this.state={
-    //         email:'',
-    //         password:'',
-    //     };
-    // }
-    render() {
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
+
+
+const fetchFonts = () => {
+    return Font.loadAsync({
+        'cornish': require('../../assets/fonts/SVN-Cornish.ttf')
+
+    });
+};
+
+export default function SignIn() {
+    const [dataLoaded, setDataLoaded] = useState(false);
+
+    if (!dataLoaded) {
         return (
-            <SafeAreaView style={styles.container}>
 
-                <View style={styles.headerArea}>
-                    <ImageBackground source={require('../../assets/imagesApp/bg_header.jpg')} style={styles.bg_header}>
-                        <Text style={styles.titleTextHeader}>H-Food</Text>
-                        <Image source={require('../../assets/imagesApp/shipper.png')} style={styles.imageHeader} />
-                    </ImageBackground>
-                </View>
-                <View style={styles.bodyArea}>
-                    <Text style={styles.titleText}>ĐĂNG NHẬP</Text>
-                    <View style={styles.formArea}>
-                        <Text>Email</Text>
-                        <TextInput style={styles.textInput} ref="TextInput" />
-                        <Text>Mật khẩu</Text>
-                        <TextInput style={styles.textInput} />
-                    </View>
-                    <TouchableOpacity style={styles.buttonSignIn}>
-                        <Text>Đăng nhập</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.buttonSignUp}>
-                        <Text>Đăng ký</Text>
-                    </TouchableOpacity>
-                </View>
 
-            </SafeAreaView>
+            <AppLoading startAsync={fetchFonts} onFinish={() => setDataLoaded(true)} onError={console.warn} />
         );
     }
+    return (
+
+        <SafeAreaView style={styles.container}>
+
+            <View style={styles.headerArea}>
+                <ImageBackground source={require('../../assets/imagesApp/bg_header.jpg')} style={styles.bg_header}>
+                    <Text style={styles.titleTextHeader}>H-Food</Text>
+                    <Image source={require('../../assets/imagesApp/shipper.png')} style={styles.imageHeader} />
+                </ImageBackground>
+            </View>
+            <View style={styles.bodyArea}>
+                <Text style={styles.titleText}>ĐĂNG NHẬP</Text>
+                <View style={styles.formArea}>
+                    <Text style={styles.nameButton}>Email</Text>
+                    <TextInput style={styles.textInput} />
+                    <Text style={styles.nameButton}>Mật khẩu</Text>
+                    <TextInput style={styles.textInput} />
+                </View>
+                <TouchableOpacity style={styles.buttonSignIn}>
+                    <Text style={styles.nameButton}>Đăng nhập</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonSignUp}>
+                    <Text style={styles.nameButton}>Đăng ký</Text>
+                </TouchableOpacity>
+            </View>
+
+        </SafeAreaView>
+    );
+}
+const font = {
+    fontFamily:'cornish'
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'rgba(52, 52, 52, 0.8)',
 
     },
     headerArea: {
@@ -52,6 +64,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+        
 
     },
     bg_header: {
@@ -59,24 +72,32 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '150%',
         resizeMode: 'stretch',
-        flexDirection:'row',
-        justifyContent:'flex-end',
-        alignItems:'flex-end',
-    },  
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+       
+        alignItems: 'flex-end',
+
+    },
     imageHeader: {
         width: '20%',
         height: null,
         aspectRatio: 180 / 186,
+        marginHorizontal:60
 
     },
     titleTextHeader: {
-      
-        fontSize: 30,
-        position:'absolute',
-        top:50,
-        left:0,
-        textShadowColor:'#000',
-        fontFamily:'SVN-Cornish'
+        ...font,
+        fontSize: 45,
+        textShadowColor: 'rgba(0, 0, 0, 0.75)',
+        textShadowOffset: { width: -2, height: 3 },
+        textShadowRadius: 10,
+        position: 'absolute',
+        top: 35,
+        left: 65,
+        alignItems: 'center',
+        fontFamily: 'cornish',
+        color: '#fff',
+
 
     },
     bodyArea: {
@@ -98,10 +119,12 @@ const styles = StyleSheet.create({
 
     },
     titleText: {
-        fontWeight: 'bold',
+        ...font,
+       
         fontSize: 20
     },
     textInput: {
+        ...font,
         width: '100%',
         height: 40,
         backgroundColor: '#f0f0f0',
@@ -110,7 +133,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5
     },
+    nameButton:{
+        ...font,
+    },
     buttonSignIn: {
+        
         width: '90%',
         alignItems: 'center',
         paddingVertical: 10,
@@ -128,3 +155,4 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     }
 });
+
