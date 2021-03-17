@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
-
-
+import { Icon } from 'react-native-elements';
 const fetchFonts = () => {
     return Font.loadAsync({
         'cornish': require('../../assets/fonts/SVN-Cornish.ttf')
@@ -11,13 +10,34 @@ const fetchFonts = () => {
     });
 };
 
-export default function SignUp() {
+export default function SignUp({ navigation }) {
     const [dataLoaded, setDataLoaded] = useState(false);
+    const [hidePass , setHidePass] = useState(true);
+    const [text_password,setText_passWord] = useState('');
+    const [reText_password,setReText_passWord] = useState('');
+    const togglePass = () => {
+        setHidePass(!hidePass);
+    }
+    useEffect(() => {
+        // custom header left navigation
+        navigation.setOptions({
+            headerLeft: (props) => (
+
+                <View>
+                    <TouchableOpacity
+                        style={{ backgroundColor: 'rgba(52, 52, 52, 0.2)', borderRadius: 30, marginLeft: 10, padding: 5 }}
+                        onPress={() => navigation.goBack()}
+                    >
+                        <Icon name='chevron-left' color='#fff'></Icon>
+                    </TouchableOpacity>
+                </View>
+            ),
+        })
+    })
+
 
     if (!dataLoaded) {
         return (
-
-
             <AppLoading startAsync={fetchFonts} onFinish={() => setDataLoaded(true)} onError={console.warn} />
         );
     }
@@ -32,27 +52,35 @@ export default function SignUp() {
                 </ImageBackground>
             </View>
             <View style={styles.bodyArea}>
-                <Text style={styles.titleText}>ĐĂNG NHẬP</Text>
+                <Text style={styles.titleText}>ĐĂNG KÝ</Text>
                 <View style={styles.formArea}>
                     <Text style={styles.nameButton}>Email</Text>
                     <TextInput style={styles.textInput} />
                     <Text style={styles.nameButton}>Mật khẩu</Text>
-                    <TextInput style={styles.textInput} secureTextEntry={true}/>
+                    <View style={[styles.textInput, styles.areaPassword]}>
+                        <TextInput secureTextEntry={hidePass} value={text_password} onChangeText={(val) => setText_passWord(val)} />
+                        <TouchableOpacity style={styles.hidePassword} onPress={() => {togglePass()}}>
+                            <Icon name={hidePass? "visibility" : "visibility-off"} />                         
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={styles.nameButton}>Nhập lại mật khẩu</Text>
+                    <View style={styles.textInput}>
+                        <TextInput  />
+                    </View>
                 </View>
                 <TouchableOpacity style={styles.buttonSignIn}>
-                    <Text style={styles.nameButton}>Đăng nhập</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonSignUp}>
                     <Text style={styles.nameButton}>Đăng ký</Text>
                 </TouchableOpacity>
+
             </View>
 
         </SafeAreaView>
     );
 }
 const font = {
-    fontFamily:'cornish'
+    fontFamily: 'cornish'
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -64,7 +92,7 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        
+
 
     },
     bg_header: {
@@ -74,7 +102,7 @@ const styles = StyleSheet.create({
         resizeMode: 'stretch',
         flexDirection: 'row',
         justifyContent: 'flex-end',
-       
+
         alignItems: 'flex-end',
 
     },
@@ -82,7 +110,7 @@ const styles = StyleSheet.create({
         width: '20%',
         height: null,
         aspectRatio: 180 / 186,
-        marginHorizontal:60
+        marginHorizontal: 60
 
     },
     titleTextHeader: {
@@ -120,7 +148,7 @@ const styles = StyleSheet.create({
     },
     titleText: {
         ...font,
-       
+
         fontSize: 20
     },
     textInput: {
@@ -131,13 +159,23 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         borderRadius: 10,
         paddingHorizontal: 10,
-        paddingVertical: 5
+        paddingVertical: 5,
+        flexDirection: 'row',
+
     },
-    nameButton:{
+    areaPassword: {
+        paddingRight: 25,
+    },
+    hidePassword: {
+        position: 'absolute',
+        right: 10,
+        top: 8,
+    },
+    nameButton: {
         ...font,
     },
     buttonSignIn: {
-        
+
         width: '90%',
         alignItems: 'center',
         paddingVertical: 10,

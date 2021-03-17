@@ -1,52 +1,6 @@
-import React, { useState } from 'react';
-import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import React from 'react';
+import {StyleSheet} from 'react-native';
 
-
-const fetchFonts = () => {
-    return Font.loadAsync({
-        'cornish': require('../../assets/fonts/SVN-Cornish.ttf')
-
-    });
-};
-export default function SignIn({navigation}) {
-    const [dataLoaded, setDataLoaded] = useState(false);
-    
-    if (!dataLoaded) {
-        return (
-            <AppLoading startAsync={fetchFonts} onFinish={() => setDataLoaded(true)} onError={console.warn} />
-        );
-    }
-    return (
-
-        <SafeAreaView style={styles.container}>
-
-            <View style={styles.headerArea}>
-                <ImageBackground source={require('../../assets/imagesApp/bg_header.jpg')} style={styles.bg_header}>
-                    <Text style={styles.titleTextHeader}>H-Food</Text>
-                    <Image source={require('../../assets/imagesApp/shipper.png')} style={styles.imageHeader} />
-                </ImageBackground>
-            </View>
-            <View style={styles.bodyArea}>
-                <Text style={styles.titleText}>ĐĂNG NHẬP</Text>
-                <View style={styles.formArea}>
-                    <Text style={styles.nameButton}>Email</Text>
-                    <TextInput style={styles.textInput} />
-                    <Text style={styles.nameButton}>Mật khẩu</Text>
-                    <TextInput style={styles.textInput} secureTextEntry={true} />
-                </View>
-                <TouchableOpacity style={styles.buttonSignIn} >
-                    <Text style={styles.nameButton}>Đăng nhập</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonSignUp} onPress={() => navigation.navigate('SignUp')}>
-                    <Text style={styles.nameButton}>Đăng ký</Text>
-                </TouchableOpacity>
-            </View>
-
-        </SafeAreaView>
-    );
-}
 const font = {
     fontFamily: 'cornish'
 }
@@ -151,5 +105,6 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginVertical: 10,
     }
-});
+}); 
 
+export default styles;

@@ -1,12 +1,35 @@
 import React from 'react';
 import SignIn from './Components/Login/SignIn.js';
-export default class App extends React.Component {
-  render() {
-    return (
-      <SignIn />
-    );
-  }
+import SignUp from './Components/Login/SignUp.js';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+
+const Stack = createStackNavigator();
+
+export default function App(navigation) {
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        {/* SignIn screen */}
+        <Stack.Screen name="SignIn"
+          component={SignIn}
+          options={{ header: () => null, }} />
+        {/* SignUp screen */}
+        <Stack.Screen name="SignUp"
+          component={SignUp}
+
+          options={{
+            headerTransparent: true,
+            
+            headerTitle: ''
+          }} />
+      </Stack.Navigator>
+    </NavigationContainer>
+
+  );
+
 
 }
-
 
