@@ -11,7 +11,7 @@ const fetchFonts = () => {
     });
 };
 
-export default function SignIn() {
+export default function SignUp() {
     const [dataLoaded, setDataLoaded] = useState(false);
 
     if (!dataLoaded) {
