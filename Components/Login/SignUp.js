@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ImageBackground,Alert } from 'react-native';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import { Icon } from 'react-native-elements';
+import auth from '@react-native-firebase/app';
+import validateForm from '../../Validate/ValidateForm.js';
+
 const fetchFonts = () => {
     return Font.loadAsync({
         'cornish': require('../../assets/fonts/SVN-Cornish.ttf')
@@ -13,14 +16,57 @@ const fetchFonts = () => {
 export default function SignUp({ navigation }) {
     const [dataLoaded, setDataLoaded] = useState(false);
     const [hidePass, setHidePass] = useState(true);
-    const [hideRePass,setHideRePass] = useState(true);
+    const [hideRePass, setHideRePass] = useState(true);
+    const [text_email, setText_email] = useState('');
     const [text_password, setText_passWord] = useState('');
     const [reText_password, setReText_passWord] = useState('');
+    const emailInput = useRef(null);
+    const passwordInput = useRef(null);
+    const rePasswordInpnut = useRef(null);
+    
     const togglePass = () => {
         setHidePass(!hidePass);
     }
     const toggleRePass = () => {
         setHideRePass(!hideRePass);
+    }
+    const signUpEmail = () => {
+        if (validateForm.isEmpty(text_email)) {
+            Alert.alert("Thông báo", "Email không được rỗng");
+            emailInput.current.focus();
+        } else if (validateForm.isEmpty(text_password)) {
+            Alert.alert("Thông báo", "Mật khẩu không được rỗng");
+            passwordInput.current.focus();
+        }
+        else if (text_password != reText_password) {
+            Alert.alert("Thông báo", "Nhập lại mật khẩu không đúng");
+            rePasswordInpnut.current.focus();
+        }else if(text_password.length<6){
+            Alert.alert("Thông báo", "Vui lòng nhập mật khẩu trên 6 ký tự");
+            passwordInput.current.focus();
+        }else if(validateForm.isEmail(text_email)){
+            Alert.alert("Thông báo", "Email không hợp lệ");
+            emailInput.current.focus();          
+        }
+        else{
+            auth()
+            .createUserWithEmailAndPassword(text_email,text_password)
+            .then(() => {
+                Alert.alert("Thông báo","Đăng ký thành công");
+                navigation.navigate("SignIn");
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    Alert.alert('That email address is already in use!');
+                }
+
+                if (error.code === 'auth/invalid-email') {
+                    Alert.alert('That email address is invalid!');
+                }
+                console.error(error);
+            });
+        }
+       
     }
     useEffect(() => {
         // custom header left navigation
@@ -59,23 +105,38 @@ export default function SignUp({ navigation }) {
                 <Text style={styles.titleText}>ĐĂNG KÝ</Text>
                 <View style={styles.formArea}>
                     <Text style={styles.nameButton}>Email</Text>
-                    <TextInput style={styles.textInput} keyboardType='email-address'/>
+                    <TextInput style={styles.textInput}
+                        ref={emailInput}
+                        keyboardType='email-address'
+                        autoFocus={true}
+                        value={text_email}
+                        onChangeText={(val) => { setText_email(val) }} />
                     <Text style={styles.nameButton}>Mật khẩu</Text>
                     <View style={[styles.textInput, styles.areaPassword]}>
-                        <TextInput secureTextEntry={hidePass} value={text_password} onChangeText={(val) => setText_passWord(val)} style={styles.inputPassword} />
-                        <TouchableOpacity style={styles.hidePassword} onPress={() => { togglePass() }}>
-                            <Icon name={hidePass ? "visibility" : "visibility-off"} />
+                        <TextInput secureTextEntry={hidePass}
+                            value={text_password}
+                            ref={passwordInput}
+                            onChangeText={(val) => setText_passWord(val)} style={styles.inputPassword} />
+                        <TouchableOpacity style={styles.hidePassword}
+                            onPress={() => { togglePass() }}>
+                            <Icon name={hidePass ? "visibility-off" : "visibility"} />
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.nameButton}>Nhập lại mật khẩu</Text>
                     <View style={[styles.textInput, styles.areaPassword]}>
-                        <TextInput secureTextEntry={hideRePass} value={reText_password} onChangeText={(val) => setReText_passWord(val)}  style={styles.inputPassword}/>
-                        <TouchableOpacity style={styles.hidePassword} onPress={() => { toggleRePass() }}>
-                            <Icon name={hideRePass ? "visibility" : "visibility-off"} />
+                        <TextInput secureTextEntry={hideRePass}
+                            value={reText_password}
+                            ref={rePasswordInpnut}
+                            onChangeText={(val) => setReText_passWord(val)}
+                            style={styles.inputPassword} />
+                        <TouchableOpacity style={styles.hidePassword}
+                            onPress={() => { toggleRePass() }}>
+                            <Icon name={hideRePass ? "visibility-off" : "visibility"} />
                         </TouchableOpacity>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.buttonSignIn}>
+                <TouchableOpacity style={styles.buttonSignIn}
+                    onPress={() => signUpEmail()}>
                     <Text style={styles.nameButton}>Đăng ký</Text>
                 </TouchableOpacity>
 
