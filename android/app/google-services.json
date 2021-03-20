@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "318228861718",
+    "project_id": "dacn-fastfoodapp",
+    "storage_bucket": "dacn-fastfoodapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:318228861718:android:40fab172e42a7e4649b637",
+        "android_client_info": {
+          "package_name": "com.dacn.fastfoodapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "318228861718-s1vl1atlh8jaogcgb41rhk3mgvrvgsk7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dacn.fastfoodapp",
+            "certificate_hash": "6f615c5eed5b6aad1426952fb687b006fccf9f91"
+          }
+        },
+        {
+          "client_id": "318228861718-h56a7ii5gpmk8r84lrmuif8darvi57k1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_y7jRi0FiPxEr7qqzeGQUeAhFwwVBCos"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "318228861718-h56a7ii5gpmk8r84lrmuif8darvi57k1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

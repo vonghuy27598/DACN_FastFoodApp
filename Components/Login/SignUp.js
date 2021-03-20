@@ -12,11 +12,15 @@ const fetchFonts = () => {
 
 export default function SignUp({ navigation }) {
     const [dataLoaded, setDataLoaded] = useState(false);
-    const [hidePass , setHidePass] = useState(true);
-    const [text_password,setText_passWord] = useState('');
-    const [reText_password,setReText_passWord] = useState('');
+    const [hidePass, setHidePass] = useState(true);
+    const [hideRePass,setHideRePass] = useState(true);
+    const [text_password, setText_passWord] = useState('');
+    const [reText_password, setReText_passWord] = useState('');
     const togglePass = () => {
         setHidePass(!hidePass);
+    }
+    const toggleRePass = () => {
+        setHideRePass(!hideRePass);
     }
     useEffect(() => {
         // custom header left navigation
@@ -55,17 +59,20 @@ export default function SignUp({ navigation }) {
                 <Text style={styles.titleText}>ĐĂNG KÝ</Text>
                 <View style={styles.formArea}>
                     <Text style={styles.nameButton}>Email</Text>
-                    <TextInput style={styles.textInput} />
+                    <TextInput style={styles.textInput} keyboardType='email-address'/>
                     <Text style={styles.nameButton}>Mật khẩu</Text>
                     <View style={[styles.textInput, styles.areaPassword]}>
-                        <TextInput secureTextEntry={hidePass} value={text_password} onChangeText={(val) => setText_passWord(val)} />
-                        <TouchableOpacity style={styles.hidePassword} onPress={() => {togglePass()}}>
-                            <Icon name={hidePass? "visibility" : "visibility-off"} />                         
+                        <TextInput secureTextEntry={hidePass} value={text_password} onChangeText={(val) => setText_passWord(val)} style={styles.inputPassword} />
+                        <TouchableOpacity style={styles.hidePassword} onPress={() => { togglePass() }}>
+                            <Icon name={hidePass ? "visibility" : "visibility-off"} />
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.nameButton}>Nhập lại mật khẩu</Text>
-                    <View style={styles.textInput}>
-                        <TextInput  />
+                    <View style={[styles.textInput, styles.areaPassword]}>
+                        <TextInput secureTextEntry={hideRePass} value={reText_password} onChangeText={(val) => setReText_passWord(val)}  style={styles.inputPassword}/>
+                        <TouchableOpacity style={styles.hidePassword} onPress={() => { toggleRePass() }}>
+                            <Icon name={hideRePass ? "visibility" : "visibility-off"} />
+                        </TouchableOpacity>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.buttonSignIn}>
@@ -164,12 +171,17 @@ const styles = StyleSheet.create({
 
     },
     areaPassword: {
-        paddingRight: 25,
+        paddingRight: 38,
     },
     hidePassword: {
         position: 'absolute',
         right: 10,
         top: 8,
+    },
+    inputPassword: {
+        width: '100%',
+        height: '100%',
+        ...font,
     },
     nameButton: {
         ...font,
