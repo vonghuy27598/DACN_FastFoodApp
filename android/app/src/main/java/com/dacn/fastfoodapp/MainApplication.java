@@ -4,6 +4,12 @@ import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 
+// import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+// import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+
+
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactInstanceManager;
@@ -43,6 +49,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       List<ReactPackage> packages = new PackageList(this).getPackages();
       packages.add(new ModuleRegistryAdapter(mModuleRegistryProvider));
+
+      // packages.add(new RNFirebaseMessagingPackage());
+      packages.add(new ReactNativeFirebaseAppPackage());
       return packages;
     }
 
