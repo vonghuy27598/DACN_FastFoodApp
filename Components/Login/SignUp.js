@@ -5,7 +5,6 @@ import AppLoading from 'expo-app-loading';
 import { Icon } from 'react-native-elements';
 import { firebaseApp } from '../Service/FirebaseConfig.js';
 import validateForm from '../../Validate/ValidateForm.js';
-import { Platform } from 'react-native';
 
 const fetchFonts = () => {
     return Font.loadAsync({
