@@ -38,7 +38,7 @@ export default function SignIn({ navigation }) {
                 .then((userCredential) => {
                     // Signed in
                     var user = userCredential.user;
-                    navigation.navigate('Home');
+                    navigation.navigate('Main');
 
                     // ...
                 })
