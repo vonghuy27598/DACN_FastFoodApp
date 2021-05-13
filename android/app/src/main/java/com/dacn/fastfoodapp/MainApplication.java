@@ -8,7 +8,8 @@ import android.net.Uri;
 // import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 
-
+//Map 
+import com.airbnb.android.react.maps.MapsPackage;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
@@ -52,6 +53,8 @@ public class MainApplication extends Application implements ReactApplication {
 
       // packages.add(new RNFirebaseMessagingPackage());
       packages.add(new ReactNativeFirebaseAppPackage());
+      //packages google map
+      packages.add(new MapsPackage());
       return packages;
     }
 

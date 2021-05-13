@@ -1,20 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, Text, TextInput, View, StyleSheet, TouchableOpacity, Image, ImageBackground, Alert, KeyboardAvoidingView } from 'react-native';
-import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
 import { Icon } from 'react-native-elements';
 import { firebaseApp } from '../Service/FirebaseConfig.js';
 import validateForm from '../../Validate/ValidateForm.js';
+import Color from '../Service/Color.js';
+import mainFont from '../Service/Font.js';
 
-const fetchFonts = () => {
-    return Font.loadAsync({
-        'cornish': require('../../assets/fonts/SVN-Cornish.ttf')
-
-    });
-};
 
 export default function SignUp({ navigation }) {
-    const [dataLoaded, setDataLoaded] = useState(false);
+
     const [hidePass, setHidePass] = useState(true);
     const [hideRePass, setHideRePass] = useState(true);
     const [text_email, setText_email] = useState('');
@@ -51,8 +45,21 @@ export default function SignUp({ navigation }) {
         else {
             firebaseApp.auth().createUserWithEmailAndPassword(text_email, text_password)
                 .then(() => {
+                    var id = firebaseApp.auth().currentUser.uid;
+                    firebaseApp.database().ref('/Users')
+                        .child(id).set({
+                            Name: "",
+                            Phone: "",
+                            Address: "",
+                            Sex: "",
+                            Birthday: "",             
+                            Email: text_email,
+                            allInfor: false
+                        })
+                        .then(() => console.log('Data updated.'));;
                     Alert.alert("Thông báo", "Đăng ký thành công");
                     navigation.navigate("SignIn");
+
                 })
                 .catch(error => {
                     if (error.code === 'auth/email-already-in-use') {
@@ -89,11 +96,7 @@ export default function SignUp({ navigation }) {
     })
 
 
-    if (!dataLoaded) {
-        return (
-            <AppLoading startAsync={fetchFonts} onFinish={() => setDataLoaded(true)} onError={console.warn} />
-        );
-    }
+
     return (
 
         <SafeAreaView style={styles.container}>
@@ -104,54 +107,54 @@ export default function SignUp({ navigation }) {
                     <Image source={require('../../assets/imagesApp/shipper.png')} style={styles.imageHeader} />
                 </ImageBackground>
             </View>
-            
-                <View style={styles.bodyArea}>
-                    <Text style={styles.titleText}>ĐĂNG KÝ</Text>
-                    <View style={styles.formArea}>
-                        <Text style={styles.nameButton}>Email</Text>
-                        <TextInput style={styles.textInput}
-                            ref={emailInput}
-                            keyboardType='email-address'
-                            autoFocus={true}
-                            value={text_email}
-                            onChangeText={(val) => { setText_email(val) }} />
-                        <Text style={styles.nameButton}>Mật khẩu</Text>
-                        <View style={[styles.textInput, styles.areaPassword]}>
-                            <TextInput secureTextEntry={hidePass}
-                                value={text_password}
-                                ref={passwordInput}
-                                onChangeText={(val) => setText_passWord(val)} style={styles.inputPassword} />
-                            <TouchableOpacity style={styles.hidePassword}
-                                onPress={() => { togglePass() }}>
-                                <Icon name={hidePass ? "visibility-off" : "visibility"} />
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={styles.nameButton}>Nhập lại mật khẩu</Text>
-                        <View style={[styles.textInput, styles.areaPassword]}>
-                            <TextInput secureTextEntry={hideRePass}
-                                value={reText_password}
-                                ref={rePasswordInpnut}
-                                onChangeText={(val) => setReText_passWord(val)}
-                                style={styles.inputPassword} />
-                            <TouchableOpacity style={styles.hidePassword}
-                                onPress={() => { toggleRePass() }}>
-                                <Icon name={hideRePass ? "visibility-off" : "visibility"} />
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <TouchableOpacity style={styles.buttonSignIn}
-                        onPress={() => signUpEmail()}>
-                        <Text style={styles.nameButton}>Đăng ký</Text>
-                    </TouchableOpacity>
 
+            <View style={styles.bodyArea}>
+                <Text style={styles.titleText}>ĐĂNG KÝ</Text>
+                <View style={styles.formArea}>
+                    <Text style={styles.nameButton}>Email</Text>
+                    <TextInput style={styles.textInput}
+                        ref={emailInput}
+                        keyboardType='email-address'
+                        autoFocus={true}
+                        autoCapitalize="none"
+                        value={text_email}
+                        onChangeText={(val) => { setText_email(val) }} />
+                    <Text style={styles.nameButton}>Mật khẩu</Text>
+                    <View style={[styles.textInput, styles.areaPassword]}>
+                        <TextInput secureTextEntry={hidePass}
+                            value={text_password}
+                            ref={passwordInput}
+                            onChangeText={(val) => setText_passWord(val)} style={styles.inputPassword} />
+                        <TouchableOpacity style={styles.hidePassword}
+                            onPress={() => { togglePass() }}>
+                            <Icon name={hidePass ? "visibility-off" : "visibility"} />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={styles.nameButton}>Nhập lại mật khẩu</Text>
+                    <View style={[styles.textInput, styles.areaPassword]}>
+                        <TextInput secureTextEntry={hideRePass}
+                            value={reText_password}
+                            ref={rePasswordInpnut}
+                            onChangeText={(val) => setReText_passWord(val)}
+                            style={styles.inputPassword} />
+                        <TouchableOpacity style={styles.hidePassword}
+                            onPress={() => { toggleRePass() }}>
+                            <Icon name={hideRePass ? "visibility-off" : "visibility"} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-            
+                <TouchableOpacity style={styles.buttonSignIn}
+                    onPress={() => signUpEmail()}>
+                    <Text style={styles.nameButton}>Đăng ký</Text>
+                </TouchableOpacity>
+
+            </View>
+
         </SafeAreaView>
     );
 }
-const font = {
-    fontFamily: 'cornish'
-}
+const font = mainFont;
+
 
 const styles = StyleSheet.create({
     container: {
@@ -247,6 +250,8 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         ...font,
+        borderWidth: 0,
+        borderBottomColor: 'transparent'
     },
     nameButton: {
         ...font,
@@ -256,7 +261,7 @@ const styles = StyleSheet.create({
         width: '90%',
         alignItems: 'center',
         paddingVertical: 10,
-        backgroundColor: '#f5bf2b',
+        backgroundColor: Color.mainColor,
         borderRadius: 30,
         marginVertical: 10,
     },

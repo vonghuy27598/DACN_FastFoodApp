@@ -5,6 +5,7 @@ var firebaseConfig = {
     authDomain: "dacn-fastfoodapp.firebaseapp.com",
     projectId: "dacn-fastfoodapp",
     storageBucket: "dacn-fastfoodapp.appspot.com",
+    databaseURL:'https://dacn-fastfoodapp-default-rtdb.firebaseio.com',
     messagingSenderId: "318228861718",
     appId: "1:318228861718:web:bb69028cf1daa01649b637",
     measurementId: "G-4YZN294F3Y"

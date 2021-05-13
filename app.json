@@ -4,11 +4,11 @@
     "slug": "DACN_FastFoodApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/imagesApp/icon/icon_logo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/imagesApp/icon/icon_logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#f5bf2b"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -21,8 +21,13 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/imagesApp/icon/icon_logo.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyB_UAZ5Y-Tf04iX7mDpJOGFubtExA0LcxI"
+        }
       },
       "package": "com.dacn.fastfoodapp"
     },
