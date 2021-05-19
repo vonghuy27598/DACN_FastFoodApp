@@ -64,15 +64,18 @@ export default function SignIn({ navigation }) {
     }, []);
 
     function Login(email, pass) {
-
+        console.log('signIn');
         if (validateForm.isEmpty(email)) {
             Alert.alert("Thông báo", "Email không được rỗng");
+            setIsLoading(false);
             emailInput.current.focus();
         } else if (validateForm.isEmpty(pass)) {
             Alert.alert("Thông báo", "Mật khẩu không được rỗng");
+            setIsLoading(false);
             passwordInput.current.focus();
         } else if (validateForm.isEmail(email)) {
             Alert.alert("Thông báo", "Email không hợp lệ");
+            setIsLoading(false);
             emailInput.current.focus();
         } else {
             firebaseApp.auth().signInWithEmailAndPassword(email, pass)

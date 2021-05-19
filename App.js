@@ -6,6 +6,7 @@ import Main from './Components/Main/index.js';
 import Search from './Components/Main/Search.js';
 import CategoryDetail from './Components/Main/CategoryDetail.js';
 import User from './Components/Main/User.js';
+import FoodDetail from './Components/Main/FoodDetail.js';
 import UpdateInfor from './Components/Main/UpdateInfor.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -146,7 +147,7 @@ export default function App() {
             component={User}
             options={{
               headerTitle: 'Tôi',
-              
+
               headerTitleStyle: {
 
                 fontSize: 20
@@ -166,11 +167,27 @@ export default function App() {
 
               },
               headerTitleStyle: {
-               
+
                 fontSize: 20
               },
               headerShown: true,
-             
+
+              headerTitleAlign: 'center',
+
+            }}
+          />
+
+          <Stack.Screen name="FoodDetail"
+            component={FoodDetail}
+            options={{
+              // headerTitle: 'Tôi',
+
+              // headerTitleStyle: {
+
+              //   fontSize: 20
+              // },
+              // headerShown: true,
+              // headerTransparent: true,
               headerTitleAlign: 'center',
 
             }}

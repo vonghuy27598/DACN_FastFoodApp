@@ -26,7 +26,7 @@ const FoodListItem = (props) => {
                     }}
                     activeOpacity={0.8}
                     underlayColor='#cacaca'
-                    onPress={() => { props.navigation.navigate("Main") }}>
+                    onPress={() => { props.navigation.navigate("FoodDetail",{ID: props.id}) }}>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={styles.Images}>
                             <Image source={{ uri: 'https://th.bing.com/th/id/Re3eea138f835647bbc15767ecac57326?rik=6oZsHLOB89RoZA&pid=ImgRaw' }} style={{ width: '100%', height: '100%', borderRadius: 30 }} resizeMode={'stretch'} />

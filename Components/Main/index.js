@@ -55,7 +55,7 @@ const Main = ({navigation }) => {
                         </MenuTrigger>
                         <MenuOptions optionsContainerStyle={{ marginTop: 40, width: 150, position: "relative" }}>
                             <View style={styles.triangle}></View>
-                            <MenuOption onSelect={() => alert(`Save`)} text='Thông tin cá nhân' />
+                            <MenuOption onSelect={() => navigation.navigate('User')} text='Thông tin cá nhân' />
                             <MenuOption onSelect={() => Logout()} text='Đăng xuất' />
                         </MenuOptions>
                     </Menu>
@@ -68,7 +68,7 @@ const Main = ({navigation }) => {
                 />
             ),
         })
-    })
+    },[])
 
     async function Logout() {
         let dataUser = await AsyncStorage.getItem("dataUser");

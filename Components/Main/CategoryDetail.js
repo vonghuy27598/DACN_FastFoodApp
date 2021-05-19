@@ -269,7 +269,7 @@ const CategoryDetail = ({ route, navigation }) => {
                     data={displayData}
                    
                     renderItem={({ item }) => <FoodListItem tensp={item.TENSP} navigation={navigation} dongia={item.DONGIA} thoigian={item.THOIGIAN} danhgia={item.DANHGIA} anh={item.IMAGES} id={item.ID} />}
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor={(item, index) => `${index}`}
                     ListFooterComponent={loadingFooter}
                     onEndReached={
                         () => {

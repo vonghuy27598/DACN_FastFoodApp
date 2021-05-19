@@ -52,8 +52,9 @@ export default function SignUp({ navigation }) {
                             Phone: "",
                             Address: "",
                             Sex: "",
-                            Birthday: "",             
+                            Birthday: "",
                             Email: text_email,
+                            Image: "",
                             allInfor: false
                         })
                         .then(() => console.log('Data updated.'));;

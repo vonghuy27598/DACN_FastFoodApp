@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Image, ImageBackground, Alert, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Image, ImageBackground, Alert, Modal, TouchableOpacity, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { firebaseApp } from '../Service/FirebaseConfig.js';
 import { Icon } from "react-native-elements";
@@ -9,19 +9,53 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Moment from 'moment';
 import Color from '../Service/Color.js';
 import LoadingInBG from '../Service/LoadingInBG.js';
+import * as ImagePicker from 'expo-image-picker';
 const User = ({ navigation }) => {
     const [idUser, setIdUser] = useState();
     const [showModalSex, setShowModalSex] = useState(false);
     const [valueRadio, setValueRadio] = useState(0);
     const [valueSex, setValueSex] = useState();
+    const [valueImage, setValueImage] = useState();
     const [dataList, setDataList] = useState([]);
     const [show, setShow] = useState(false);
     const [date, setDate] = useState(new Date(1598051730000));
     const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+    const [image, setImage] = useState(null);
+    const [acceptUpImg, setAcceptUpImg] = useState(false);
     useEffect(() => {
         _getUserData();
+        getImage();
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
+            }
+        })();
     }, [date, valueSex]);
 
+    useEffect(() => {
+        if (acceptUpImg)
+            confirmUploadImage();
+    }, [acceptUpImg]);
+
+    const confirmUploadImage = () => {
+        Alert.alert(
+            'Thông báo',
+            'Bạn có muốn lưu ảnh này không?',
+            [
+                {
+                    text: 'Hủy',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel'
+                },
+                { text: 'Đồng ý', onPress: () => uploadImage() }
+            ],
+            { cancelable: false }
+        );
+    }
+    //getData
     const _getUserData = async () => {
         Moment.locale('en');
         let userID = await AsyncStorage.getItem("userID");
@@ -29,13 +63,78 @@ const User = ({ navigation }) => {
         await firebaseApp.database().ref().child("Users").on('value', (data) => {
             var listData = [];
             listData.push(data.child(`${userID}`).val());
-            listData.map((item) =>{
+            const dataImage = "";
+            listData.map(async (item) => {
                 setValueRadio(item.Sex);
                 setDate(item.Birthday);
+
             })
             setDataList(listData);
             setIsLoadingUpdate(false);
         })
+    }
+    const getImage = async () => {
+        let userID = await AsyncStorage.getItem("userID");
+        const urlImage = await firebaseApp.storage().ref("/images/avatar/" + `${userID}`).getDownloadURL();
+        setImage(urlImage);
+    }
+    //open pickerImage
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            setImage(result.uri);
+            setAcceptUpImg(true);
+
+        } else
+            setAcceptUpImg(false);
+    };
+    const uploadImage = async () => {
+        console.log('start upload Image');
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function () {
+                reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', image, true);
+            xhr.send(null);
+        });
+        console.log('load');
+
+        var metadata = { cotentType: 'image/jpeg', };
+        const dateUpImage = new Date().toISOString();
+        const ref = firebaseApp.storage().ref("/images/avatar/" + `${idUser}`);
+        const deleteImage = await ref.delete().then(() => {
+
+            console.log('success');
+
+        }).catch((error) => {
+            console.log(error);
+        });
+        const snapshot = ref.put(blob, metadata);
+
+        snapshot.on('state_changed', taskSnapshot => {
+
+        });
+
+        snapshot.then(() => {
+            console.log('Image uploaded to the bucket!');
+            ToastAndroid.show("Cập nhật hình ảnh thành công",ToastAndroid.LONG);
+            blob.close();
+            setAcceptUpImg(false);
+
+        });
     }
     //Function Sex
     const openModalSex = () => {
@@ -149,6 +248,8 @@ const User = ({ navigation }) => {
         }
 
     }
+
+
     const listInfor = ({ item }) => {
         return (
             <View >
@@ -228,7 +329,12 @@ const User = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground style={styles.header} source={require('../../assets/imagesApp/bg_user_header.jpg')} imageStyle={{ opacity: 0.12 }} >
-                <Image source={require('../../assets/imagesApp/icon/icon_user.png')} style={styles.avatarImage} />
+                {/* openImage */}
+                <TouchableOpacity onPress={() => pickImage()}>
+                    {image != null ? <Image source={{ uri: image }} style={{ width: 130, height: 130, borderRadius: 130 / 2 }} /> : <Image source={require('../../assets/imagesApp/icon/icon_user.png')} style={styles.avatarImage} />}
+
+                </TouchableOpacity>
+
 
             </ImageBackground>
             <View style={{ flex: 1, paddingVertical: 10 }}>
