@@ -12,20 +12,16 @@ import { DrawerActions } from '@react-navigation/routers';
 
 
 export default function SignIn({ navigation }) {
-
     const [hidePass, setHidePass] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
-
     const [text_email, setText_email] = useState('');
     const [text_password, setText_passWord] = useState('');
     const emailInput = useRef(null);
     const passwordInput = useRef(null);
-
     const togglePass = () => {
         setHidePass(!hidePass);
 
     }
-
     async function setData(email, pass, userID) {
         try {
             const dataList = [{ "login": true, "email": email, "password": pass }];
@@ -35,7 +31,6 @@ export default function SignIn({ navigation }) {
             console.log("errorSetData: ", error);
         }
     }
-
     async function getData() {
         try {
             let dataUser = await AsyncStorage.getItem("dataUser");
@@ -59,7 +54,6 @@ export default function SignIn({ navigation }) {
     useEffect(() => {
         getData();
         return () => {
-
         }
     }, []);
 

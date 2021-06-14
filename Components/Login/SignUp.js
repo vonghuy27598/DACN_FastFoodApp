@@ -54,10 +54,9 @@ export default function SignUp({ navigation }) {
                             Sex: "",
                             Birthday: "",
                             Email: text_email,
-                            Image: "",
                             allInfor: false
                         })
-                        .then(() => console.log('Data updated.'));;
+                        .then(() => console.log('Data updated.'));
                     Alert.alert("Thông báo", "Đăng ký thành công");
                     navigation.navigate("SignIn");
 
@@ -74,10 +73,6 @@ export default function SignUp({ navigation }) {
                 });
 
         }
-
-
-
-
     }
     useEffect(() => {
         // custom header left navigation

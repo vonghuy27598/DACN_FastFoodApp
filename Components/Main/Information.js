@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, ToastAndroid } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const Information = ({navigation }) => {
-    
+const Information = ({ navigation }) => {
+
     const [listShow, setListShow] = useState([
         { title: "Thông tin cá nhân", icon: "supervised-user-circle", route: 'information' },
         { title: "Lịch sử đặt hàng", icon: "history", route: "history" },
@@ -35,7 +35,7 @@ const Information = ({navigation }) => {
         });
         navigation.navigate('SignIn');
     }
-    
+
     const changeScreen = (route) => {
         switch (route) {
             case "information":
@@ -43,10 +43,10 @@ const Information = ({navigation }) => {
                 navigation.navigate("User");
                 break;
             case "history":
-                navigation.navigate("Home");
+                ToastAndroid.show("Chức năng đang được cập nhật",ToastAndroid.SHORT);
                 break;
             case "introduce":
-                navigation.navigate("Home");
+                ToastAndroid.show("Chức năng đang được cập nhật",ToastAndroid.SHORT);
                 break;
             case "logout":
                 Logout();

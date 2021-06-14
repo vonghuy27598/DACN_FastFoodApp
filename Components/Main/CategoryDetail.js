@@ -25,42 +25,33 @@ const CategoryDetail = ({ route, navigation }) => {
     //get Data on firebase
 
     useEffect(() => {
-
-        function getData() {
-            navigation.setOptions({
-                headerTitle: DM_NAME
-            });
-
-            allData();
-            typeData();
-        }
-
         getData();
         return () => {
 
         }
     }, [sizeItem, tempValueSort, tempValueType])
+    function getData() {
+        navigation.setOptions({
+            headerTitle: DM_NAME,
+           
+        });
 
-
-
+        allData();
+        typeData();
+    }
     async function allData() {
         const getListData = await firebaseApp.database().ref('/Category/' + `${DM_ID}/DM_NAME/${DM_NAME}`).once('value', (data) => {
             const listIdFood = Object.keys(data.val());
             const list = [];
-
             listIdFood.map((id) => {
                 const propFood = data.child(`${id}`).val();
                 const dataFood = { "ID": id, ...propFood };
                 list.push(dataFood);
-
             });
 
             if (list.length == displayData.length)
                 setEmptyData(true);
-
             setListData(list);
-
-
             switch (tempValueSort) {
                 case 0:
                     setTitleSort("Sắp xếp");
@@ -68,7 +59,6 @@ const CategoryDetail = ({ route, navigation }) => {
                     break;
                 case 1:
                     setTitleSort("Giá giảm dần");
-
                     list.sort(function (obj1, obj2) {
                         return obj2.DONGIA - obj1.DONGIA;
                     });
@@ -77,7 +67,6 @@ const CategoryDetail = ({ route, navigation }) => {
                     break;
                 case 2:
                     setTitleSort("Giá tăng dần");
-
                     list.sort(function (obj1, obj2) {
                         return obj1.DONGIA - obj2.DONGIA;
                     });
@@ -115,7 +104,7 @@ const CategoryDetail = ({ route, navigation }) => {
                     setTitleType("Danh mục");
                     break;
                 default:
-                   
+
                     list.map((item, index) => {
                         if (index == tempValueType) {
                             setTitleType(item.Name);
@@ -160,9 +149,7 @@ const CategoryDetail = ({ route, navigation }) => {
                     justifyContent: 'center'
                 }}>
                     <ActivityIndicator size='large' color="#000" />
-
                 </View>
-
             );
         }
 
@@ -174,7 +161,7 @@ const CategoryDetail = ({ route, navigation }) => {
             <RadioButton.Group onValueChange={value => unCheckType(value)} value={checkType}>
                 {listTypeData.map((item, index) => {
                     return (
-                        <RadioButton.Item label={item.Name} value={index} labelStyle={styles.textCheck} color={Color.mainColor} />
+                        <RadioButton.Item key={`${index}`} label={item.Name} value={index} labelStyle={styles.textCheck} color={Color.mainColor} />
                     );
                 })}
             </RadioButton.Group>
@@ -267,8 +254,8 @@ const CategoryDetail = ({ route, navigation }) => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ flexGrow: 1, }}
                     data={displayData}
-                   
-                    renderItem={({ item }) => <FoodListItem tensp={item.TENSP} navigation={navigation} dongia={item.DONGIA} thoigian={item.THOIGIAN} danhgia={item.DANHGIA} anh={item.IMAGES} id={item.ID} />}
+
+                    renderItem={({ item }) => <FoodListItem tensp={item.TENSP} navigation={navigation} dongia={item.DONGIA} thoigian={item.THOIGIAN} danhgia={item.DANHGIA} anh={item.IMAGES} id={item.ID} dm={DM_ID} />}
                     keyExtractor={(item, index) => `${index}`}
                     ListFooterComponent={loadingFooter}
                     onEndReached={

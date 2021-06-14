@@ -93,7 +93,7 @@ const CustomDrawer = ({ navigation }) => {
                     keyExtractor={(item) => item.id}
                 />
             </View>
-            <DrawerItem label='Đăng xuất' />
+            {/* <DrawerItem label='Đăng xuất' /> */}
         </DrawerContentScrollView>
     );
 }

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import Home from './Home.js';
+import Cart from './Cart.js';
 import Location from './Location.js';
 import Information from './Information.js';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Color from '../Service/Color.js';
-import { View, TouchableOpacity, StyleSheet, Image, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Image, Text,ToastAndroid } from 'react-native';
 import { Icon } from "react-native-elements";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -23,8 +24,8 @@ import { DrawerActions } from '@react-navigation/native';
 const Tab = createBottomTabNavigator();
 
 
-const Main = ({navigation }) => {
-    
+const Main = ({ navigation }) => {
+
     useEffect(() => {
         // custom header left navigation
         navigation.setOptions({
@@ -41,7 +42,8 @@ const Main = ({navigation }) => {
             ),
             headerRight: (props) => (
                 <View style={styles.areaRight}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Search')} style={{ marginHorizontal: 20 }}>
+                    {/* <TouchableOpacity onPress={() => {navigation.navigate('Search')}} style={{ marginHorizontal: 20 }}> */}
+                    <TouchableOpacity onPress={() => {ToastAndroid.show('Chức năng đang được cập nhật',ToastAndroid.SHORT)}} style={{ marginHorizontal: 20 }}>
                         <Icon type="ionicon" name={Platform.OS === "ios" ? "ios-search" : "search"} color='black' />
 
                     </TouchableOpacity>
@@ -68,7 +70,7 @@ const Main = ({navigation }) => {
                 />
             ),
         })
-    },[])
+    }, [])
 
     async function Logout() {
         let dataUser = await AsyncStorage.getItem("dataUser");
@@ -104,6 +106,19 @@ const Main = ({navigation }) => {
                         />
                     ),
                 }} />
+            {/* <Tab.Screen
+                name="Cart"
+                component={Cart}
+                options={{
+                    tabBarLabel: 'Cart',
+                    tabBarIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons
+                            name="cart"
+                            color={color}
+                            size={size}
+                        />
+                    ),
+                }} /> */}
             <Tab.Screen
                 name="Location"
                 component={Location}
@@ -121,7 +136,7 @@ const Main = ({navigation }) => {
             <Tab.Screen
                 name="Infor"
                 component={Information}
-                
+
                 options={{
                     tabBarLabel: 'Cá nhân',
                     tabBarIcon: ({ color, size }) => (
@@ -131,7 +146,7 @@ const Main = ({navigation }) => {
                             size={size}
                         />
                     ),
-                    
+
                 }} />
         </Tab.Navigator>
     );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, FlatList } from 'react-native';
 import { SliderBox } from "react-native-image-slider-box";
 import CategoryListItem from './CategoryFood/CategoryListItem.js';
@@ -12,35 +12,28 @@ const Home = ({ navigation }) => {
         require('../../assets/imagesApp/banner3.jpg'),
         require('../../assets/imagesApp/banner4.jpg'),
     ]);
-    const [dataCategory, setDataCategory] = useState([{
-
-    }]);
-   
-
+    const [dataCategory, setDataCategory] = useState([]);
     useEffect(() => {
-        async function getCategoryList() {
-            const rootRef = await firebaseApp.database().ref()
-                .on('value', (snapshot) => {
-                    const data = Object.keys(snapshot.child('Category').val());
-                    const listData = [];
-                    data.map((item) => {
-                        firebaseApp.database().ref().on('value', (category) => {
-                            // // console.log("img", category.child('Category').child(`${item}`).child("images").val());
-                            // // console.log("name", Object.keys(category.child('Category').child(`${item}`).child("DM_NAME").val()));
-                            var img = category.child('Category').child(`${item}`).child("images").val();
-                            var name = Object.keys(category.child('Category').child(`${item}`).child("DM_NAME").val());
-                            listData.push({ "id": item, "name": name[0], "img": img });
-                            setDataCategory(listData);
-                            // setDataCategory([...dataCategory, { "id": i, "name": name[0], "img": img }]);                           
-                        })
-                    });
-                });
-           return rootRef;
+        if (dataCategory.length === 0) {
+            getCategoryList();
         }
-        getCategoryList();
-        
     }, []);
-
+    const getCategoryList = async () => {
+        console.log('getdata');
+        const rootRef = await firebaseApp.database().ref()
+            .once('value', (snapshot) => {
+                const data = Object.keys(snapshot.child('Category').val());
+                const listData = [];
+                data.map((item) => {
+                    firebaseApp.database().ref().on('value', (category) => {
+                        var img = category.child('Category').child(`${item}`).child("images").val();
+                        var name = Object.keys(category.child('Category').child(`${item}`).child("DM_NAME").val());
+                        listData.push({ "id": item, "name": name[0], "img": img });
+                        setDataCategory(listData);            
+                    })
+                });
+            });
+    }
     return (
         <View>
             <SliderBox
@@ -92,13 +85,10 @@ const Home = ({ navigation }) => {
                 }}
                 scrollEnabled={false}
                 numColumns={4}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
                 data={dataCategory}
                 renderItem={({ item }) => <CategoryListItem id={item.id} name={item.name} img={item.img} border={false} route={navigation} />}
-                keyExtractor={(item,index) => index.toString()}
+                keyExtractor={(item, index) => `${index}`}
             />
-           
         </View>
     );
 }

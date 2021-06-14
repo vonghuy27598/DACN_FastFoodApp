@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LogBox, Image } from 'react-native';
+import { LogBox, Image, TouchableOpacity } from 'react-native';
 import SignIn from './Components/Login/SignIn.js';
 import SignUp from './Components/Login/SignUp.js';
 import Main from './Components/Main/index.js';
@@ -8,6 +8,7 @@ import CategoryDetail from './Components/Main/CategoryDetail.js';
 import User from './Components/Main/User.js';
 import FoodDetail from './Components/Main/FoodDetail.js';
 import UpdateInfor from './Components/Main/UpdateInfor.js';
+import AcceptOrder from './Components/Main/Order.js';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as Font from 'expo-font';
@@ -180,18 +181,40 @@ export default function App() {
           <Stack.Screen name="FoodDetail"
             component={FoodDetail}
             options={{
-              // headerTitle: 'Tôi',
+             
+              headerStyle: {
+                backgroundColor: Color.mainColor,
 
-              // headerTitleStyle: {
-
-              //   fontSize: 20
-              // },
-              // headerShown: true,
-              // headerTransparent: true,
+              },
+              
               headerTitleAlign: 'center',
-
+              headerTitle: "CHI TIẾT SẢN PHẨM",
+              headerTitleStyle:{
+                fontSize: 20,
+                color:'#fff',
+                fontWeight:'bold',
+                textShadowOffset: { width: 2, height: 2 },
+                textShadowRadius: 10,
+                textShadowColor: 'rgba(0, 0, 0, 0.75)',
+              }
             }}
           />
+
+          <Stack.Screen name="AcceptOrder"
+            component={AcceptOrder}
+            options={{
+              headerTitle: 'Xác nhận đơn hàng',
+              headerStyle: {
+                // backgroundColor: Color.mainColor,
+              },
+              headerTitleStyle: {
+                fontSize: 20
+              },
+              headerShown: true,
+              headerTitleAlign: 'center',
+            }}
+          />
+
         </Stack.Navigator>
       </NavigationContainer>
     </MenuProvider >

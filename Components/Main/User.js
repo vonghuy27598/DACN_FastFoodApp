@@ -62,12 +62,10 @@ const User = ({ navigation }) => {
         setIdUser(userID);
         await firebaseApp.database().ref().child("Users").on('value', (data) => {
             var listData = [];
-            listData.push(data.child(`${userID}`).val());
-            const dataImage = "";
+            listData.push(data.child(`${userID}`).val());   
             listData.map(async (item) => {
                 setValueRadio(item.Sex);
                 setDate(item.Birthday);
-
             })
             setDataList(listData);
             setIsLoadingUpdate(false);

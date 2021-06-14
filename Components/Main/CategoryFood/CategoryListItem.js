@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { TouchableHighlight } from 'react-native';
 import { View, StyleSheet, Image, Text, ActivityIndicator } from 'react-native';
@@ -9,22 +9,19 @@ const CategoryListItem = (props) => {
     const [urlImages, setUrlImages] = useState();
     const [loadding, setLoadding] = useState(true);
     useEffect(() => {
-        async function getImages() {
-            const ref = firebaseApp.storage().ref('images/icon/' + `${props.img}`);
-            const url = await ref.getDownloadURL();
-
-            setUrlImages(url);
-            setLoadding(false);
-        }
         getImages();
-        return () =>{
-            setLoadding(false);
-        }
-    }, [])
+        
+    }, []);
+    async function getImages() {
+      
+        const ref = firebaseApp.storage().ref('images/icon/' + `${props.img}`);
+        const url = await ref.getDownloadURL();
 
-
-    return (
-        !props.border ?
+        setUrlImages(url);
+        setLoadding(false);
+    }
+    const listItemHome = useMemo(() => {
+        return (
             <TouchableOpacity style={style.container}
                 onPress={() => props.route.navigate('CategoryDetail', {
                     DM_ID: props.id,
@@ -38,10 +35,14 @@ const CategoryListItem = (props) => {
                         </View>
                 }
             </TouchableOpacity >
-            :
+        );
+    });
+
+    const listItemMenu = useMemo(() => {
+        return (
             <TouchableHighlight style={style.singleContainer}
                 activeOpacity={0.8}
-                
+
                 underlayColor={Color.mainColor}
                 onPress={() => props.route.navigate('CategoryDetail', {
                     DM_ID: props.id,
@@ -56,7 +57,10 @@ const CategoryListItem = (props) => {
                         </View>
                 }
             </TouchableHighlight >
-
+        );
+    });
+    return (
+        !props.border ? listItemHome : listItemMenu
     );
 }
 
@@ -79,7 +83,7 @@ const style = StyleSheet.create({
     },
     singleContainer: {
         flex: 1,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
         paddingHorizontal: 5,
         paddingVertical: 15,
         marginHorizontal: 5,

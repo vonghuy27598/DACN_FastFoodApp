@@ -1,13 +1,13 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Platform, Text, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
-
-
+import { firebaseApp } from '../Service/FirebaseConfig.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const LocationView = () => {
-    const [location, setLocation] = useState();
+  const [location, setLocation] = useState();
   const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (Platform.OS === 'android' && !Constants.isDevice) {
@@ -15,7 +15,8 @@ const LocationView = () => {
     } else {
       _getLocationAsync();
     }
-  
+
+
   }, []);
 
   _getLocationAsync = async () => {
@@ -34,7 +35,26 @@ const LocationView = () => {
     };
     setLocation(Region);
     setIsLoading(false);
-    console.log("test", Region);
+    let userID = await AsyncStorage.getItem("userID");
+    let name, phone, address;
+    await firebaseApp.database().ref().child("Users").on('value', (data) => {
+      var listData = [];
+      listData.push(data.child(`${userID}`).val());
+
+      listData.map((item) => {
+        name = item.Name;
+        phone = item.Phone;
+        address = item.Address;
+      });
+    });
+
+    firebaseApp.database().ref().child("Location").push().set({
+      Name: name,
+      Phone: phone,
+      Address: address,
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
   };
 
 
@@ -46,7 +66,7 @@ const LocationView = () => {
   return (
 
     isLoading ? <ActivityIndicator size={'large'} color={'#000'} style={{ alignItems: 'center', justifyContent: 'center' }} />
-      : 
+      :
       <MapView
 
         initialRegion={location}
@@ -56,9 +76,6 @@ const LocationView = () => {
         showsCompass={true}
         style={{ flex: 1 }}
       />
-
-    
-
   );
 }
 const styles = StyleSheet.create({
